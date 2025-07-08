@@ -1,0 +1,52 @@
+{
+  "kvaGroups": {
+    "Group K": 437,
+    "Group L": 390,
+    "Group M": 630,
+    "Group N": 435,
+    "Group O": 189,
+    "Group AM": 600
+  },
+  "equipmentKVA": {
+    "Group K": [
+      { "name": "CH01", "kva": 410 },
+      { "name": "PCH-1", "kva": 27.5 },
+      { "name": "PCH-2", "kva": 0 },
+      { "name": "PCH-5", "kva": 0 },
+      { "name": "Others", "kva": 0 }
+    ],
+    "Group L": [
+      { "name": "CH02", "kva": 0 },
+      { "name": "Others", "kva": 0 }
+    ],
+    "Group M": [
+      { "name": "CH03", "kva": 406 },
+      { "name": "PCH-3", "kva": 27.2 },
+      { "name": "PCH-4", "kva": 6.68 },
+      { "name": "PCH-6", "kva": 0 },
+      { "name": "PCH-7", "kva": 27.9 },
+      { "name": "Others", "kva": 0 }
+    ],
+    "Group N": [
+      { "name": "CH04", "kva": 318 },
+      { "name": "Others", "kva": 0 }
+    ],
+    "Group O": [
+      { "name": "CH05", "kva": 4.14 },
+      { "name": "Others", "kva": 0 }
+    ],
+    "Group AM": [
+      { "name": "CH06", "kva": 2.24 },
+      { "name": "CH07", "kva": 430 },
+      { "name": "Others", "kva": 0 }
+    ]
+  },
+  "kwhGroups": {
+    "Group K": 30321,
+    "Group L": 33807,
+    "Group M": 27646,
+    "Group N": 23301,
+    "Group O": 22853,
+    "Group AM": 65848
+  }
+}

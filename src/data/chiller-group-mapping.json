@@ -1,0 +1,18 @@
+{
+  "mapping": {
+    "CH01": "Group K",
+    "PCH-1": "Group K",
+    "PCH-2": "Group K",
+    "PCH-5": "Group K",
+    "CH02": "Group L",
+    "CH03": "Group M",
+    "PCH-3": "Group M",
+    "PCH-4": "Group M",
+    "PCH-6": "Group M",
+    "PCH-7": "Group M",
+    "CH04": "Group N",
+    "CH05": "Group O",
+    "CH06": "Group AM",
+    "CH07": "Group AM"
+  }
+}

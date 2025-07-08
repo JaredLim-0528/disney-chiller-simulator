@@ -1,0 +1,15 @@
+{
+  "monthlyTotalCoolingLoad": 1103433,
+  "avg10DayLoad": 157633,
+  "predictions": {
+    "peakCoolingLoad": {
+      "value": 3600,
+      "unit": "TR"
+    },
+    "wetBulbTemperature": {
+      "min": 10,
+      "max": 12,
+      "unit": "°C"
+    }
+  }
+}

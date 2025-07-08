@@ -1,0 +1,388 @@
+{
+  "combinations": [
+    {
+      "chillers": "CH01, CH03, CH05, CH07",
+      "cop": 8.19,
+      "time": "1124",
+      "estimatedKwh": 2450
+    },
+    {
+      "chillers": "CH01, CH02, CH03, CH04",
+      "cop": 6.69,
+      "time": "1129",
+      "estimatedKwh": 2100
+    },
+    {
+      "chillers": "CH01, CH02, CH03, CH05",
+      "cop": 6.10,
+      "time": "1135",
+      "estimatedKwh": 2350
+    },
+    {
+      "chillers": "CH01, CH03, CH05, CH06",
+      "cop": 6.03,
+      "time": "1170",
+      "estimatedKwh": 2300
+    },
+    {
+      "chillers": "CH01, CH03, CH04, CH05",
+      "cop": 6.02,
+      "time": "1188",
+      "estimatedKwh": 2250
+    },
+    {
+      "chillers": "CH01, CH03, CH04, CH05, CH07",
+      "cop": 6.01,
+      "time": "1205",
+      "estimatedKwh": 2200
+    },
+    {
+      "chillers": "CH01, CH02, CH05, CH07",
+      "cop": 5.93,
+      "time": "1221",
+      "estimatedKwh": 2150
+    },
+    {
+      "chillers": "CH01, CH02, CH03, CH04, CH05",
+      "cop": 5.88,
+      "time": "1223",
+      "estimatedKwh": 2100
+    },
+    {
+      "chillers": "CH01, CH02, CH03, CH07",
+      "cop": 5.74,
+      "time": "1233",
+      "estimatedKwh": 2050
+    },
+    {
+      "chillers": "CH01, CH02, CH03, CH05, CH07",
+      "cop": 5.66,
+      "time": "1243",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH03, CH04, CH05, CH07",
+      "cop": 5.56,
+      "time": "1250",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH02, CH03, CH04, CH05",
+      "cop": 5.54,
+      "time": "1255",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH02, CH03, CH04, CH05, CH06, CH07",
+      "cop": 5.49,
+      "time": "1260",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH02, CH04, CH06, CH07",
+      "cop": 5.34,
+      "time": "1265",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH02, CH03, CH04, CH05, CH07",
+      "cop": 5.34,
+      "time": "1270",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH02, CH04, CH07",
+      "cop": 5.24,
+      "time": "1275",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH02, CH03, CH04, CH05, CH07",
+      "cop": 5.20,
+      "time": "1280",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH02, CH04, CH05, CH07",
+      "cop": 5.18,
+      "time": "1285",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH02, CH03, CH04, CH07",
+      "cop": 5.12,
+      "time": "1290",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH02, CH03, CH04, CH06, CH07",
+      "cop": 5.10,
+      "time": "1295",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH03, CH04, CH05, CH06",
+      "cop": 5.06,
+      "time": "1300",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH02, CH04, CH06, CH07",
+      "cop": 5.03,
+      "time": "1305",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH03, CH04, CH07",
+      "cop": 5.02,
+      "time": "1310",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH02, CH05, CH06, CH07",
+      "cop": 5.01,
+      "time": "1315",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH02, CH03, CH04, CH06, CH07",
+      "cop": 4.98,
+      "time": "1320",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH02, CH04, CH05, CH07",
+      "cop": 4.96,
+      "time": "1325",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH02, CH03, CH04, CH05, CH06, CH07",
+      "cop": 4.94,
+      "time": "1330",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH02, CH03, CH05, CH06, CH07",
+      "cop": 4.93,
+      "time": "1335",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH03, CH04, CH06, CH07",
+      "cop": 4.91,
+      "time": "1340",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH03, CH05, CH06, CH07",
+      "cop": 4.89,
+      "time": "1345",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH02, CH05, CH06",
+      "cop": 4.88,
+      "time": "1350",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH02, CH05, CH06, CH07",
+      "cop": 4.87,
+      "time": "1355",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH02, CH03, CH05, CH06, CH07",
+      "cop": 4.87,
+      "time": "1360",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH03, CH04, CH05, CH06, CH07",
+      "cop": 4.85,
+      "time": "1365",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH02, CH06, CH07",
+      "cop": 4.77,
+      "time": "1370",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH04, CH05, CH07",
+      "cop": 4.75,
+      "time": "1375",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH03, CH04, CH05, CH06",
+      "cop": 4.70,
+      "time": "1380",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH02, CH03, CH04, CH07",
+      "cop": 4.63,
+      "time": "1385",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH02, CH03, CH05, CH07",
+      "cop": 4.63,
+      "time": "1390",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH02, CH04, CH05, CH06, CH07",
+      "cop": 4.61,
+      "time": "1395",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH04, CH06, CH07",
+      "cop": 4.61,
+      "time": "1400",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH03, CH05, CH06, CH07",
+      "cop": 4.61,
+      "time": "1405",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH04, CH05, CH06, CH07",
+      "cop": 4.59,
+      "time": "1410",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH02, CH04, CH06",
+      "cop": 4.55,
+      "time": "1415",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH03, CH04, CH05, CH06, CH07",
+      "cop": 4.50,
+      "time": "1420",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH04, CH05, CH06",
+      "cop": 4.47,
+      "time": "1425",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH02, CH03, CH06, CH07",
+      "cop": 4.46,
+      "time": "1430",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH05, CH06, CH07",
+      "cop": 4.41,
+      "time": "1435",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH02, CH03, CH04, CH05, CH06",
+      "cop": 4.37,
+      "time": "1440",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH03, CH06, CH07",
+      "cop": 4.36,
+      "time": "1445",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH02, CH04, CH05, CH06, CH07",
+      "cop": 4.34,
+      "time": "1450",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH02, CH03, CH06, CH07",
+      "cop": 4.26,
+      "time": "1455",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH03, CH04, CH06, CH07",
+      "cop": 4.25,
+      "time": "1460",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH02, CH04, CH05",
+      "cop": 4.20,
+      "time": "1465",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH04, CH05, CH06, CH07",
+      "cop": 4.20,
+      "time": "1470",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH02, CH03, CH05, CH06",
+      "cop": 3.92,
+      "time": "1475",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH02, CH03, CH04, CH06",
+      "cop": 3.66,
+      "time": "1480",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH03, CH04, CH06",
+      "cop": 3.65,
+      "time": "1485",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH02, CH03, CH04, CH05, CH06",
+      "cop": 3.65,
+      "time": "1490",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH02, CH04, CH05, CH06",
+      "cop": 3.62,
+      "time": "1495",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH02, CH04, CH05, CH06",
+      "cop": 3.46,
+      "time": "1500",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH02, CH03, CH05, CH06",
+      "cop": 3.44,
+      "time": "1505",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH02, CH03, CH04, CH06",
+      "cop": 3.38,
+      "time": "1510",
+      "estimatedKwh": 2000
+    },
+    {
+      "chillers": "CH01, CH02, CH03, CH06",
+      "cop": 2.77,
+      "time": "1515",
+      "estimatedKwh": 2000
+    }
+  ]
+}
