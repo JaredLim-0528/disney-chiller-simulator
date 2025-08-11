@@ -1,14 +1,19 @@
 import React from 'react';
-import type { ChillerConfig } from '../types';
 
 interface ChillerConfigCardProps {
-  config: ChillerConfig;
+  config: {
+    Chiller: string;
+    'Capacity (TR)': number;
+    Type: string;
+  };
   maxCop: number;
+  translations?: any;
 }
 
 export function ChillerConfigCard({ 
   config, 
-  maxCop
+  maxCop,
+  translations: t
 }: ChillerConfigCardProps) {
   return (
     <div
@@ -25,11 +30,11 @@ export function ChillerConfigCard({
       <h3 className="text-2xl font-bold text-white">{config.Chiller}</h3>
       <div className="mt-2 space-y-2 w-full">
         <div className="flex items-center gap-2">
-          <span className="text-base text-gray-400">Capacity:</span>
+          <span className="text-base text-gray-400">{t?.capacity || 'Capacity'}:</span>
           <span className="text-base font-medium text-gray-200 ml-auto">{config['Capacity (TR)']} TR</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-base text-gray-400">Max COP:</span>
+          <span className="text-base text-gray-400">{t?.maxCOP || 'Max COP'}:</span>
           <span className="text-base font-medium text-gray-200 ml-auto">{maxCop.toFixed(2)}</span>
         </div>
       </div>

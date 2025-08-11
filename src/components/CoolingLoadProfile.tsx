@@ -35,6 +35,7 @@ interface CoolingLoadProfileProps {
   }>;
   selectedMonth?: string;
   onMonthChange?: (month: string) => void;
+  translations?: any;
 }
 
 const MONTHS = [
@@ -55,7 +56,8 @@ const MONTHS = [
 export function CoolingLoadProfile({ 
   data: propData, 
   selectedMonth: propSelectedMonth = 'jul',
-  onMonthChange 
+  onMonthChange,
+  translations: t
 }: CoolingLoadProfileProps) {
   const [selectedMonth, setSelectedMonth] = useState(propSelectedMonth);
   const [monthlyData, setMonthlyData] = useState<MonthlyLoadData[]>([]);
@@ -208,7 +210,7 @@ export function CoolingLoadProfile({
       x: {
         title: {
           display: true,
-          text: 'Time',
+          text: t?.time || 'Time',
           color: '#6B7280',
           font: {
             size: 12,
@@ -229,7 +231,7 @@ export function CoolingLoadProfile({
       y: {
         title: {
           display: true,
-          text: 'Cooling Load (kW)',
+          text: t?.coolingLoadKW || 'Cooling Load (kW)',
           color: '#6B7280',
           font: {
             size: 12,
@@ -331,12 +333,12 @@ export function CoolingLoadProfile({
       {/* Header with Month Selector */}
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold text-white">
-          Selected Month: {selectedMonthLabel}
+          {t?.selectedMonth || 'Selected Month'}: {selectedMonthLabel}
         </h2>
         
         <div className="flex items-center space-x-3">
           <label htmlFor="month-select" className="text-sm font-medium text-gray-300">
-            Select Month:
+            {t?.selectMonth || 'Select Month'}:
           </label>
           <select
             id="month-select"

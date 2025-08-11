@@ -58,6 +58,7 @@ interface ManuallyDefinedSequenceProps {
   septaCopData: Record<string, number | null>[];
   coolingLoadProfile: Array<{hour: number, load: number}>;
   selectedPriorityResult?: PriorityOrderResult | null;
+  translations?: any;
 }
 
 // Load chiller priority from CSV
@@ -214,7 +215,8 @@ function findBestCombinationForLoad(
   quadCopData: Record<string, number | null>[],
   pentaCopData: Record<string, number | null>[],
   hexaCopData: Record<string, number | null>[],
-  septaCopData: Record<string, number | null>[]
+  septaCopData: Record<string, number | null>[],
+  translations?: any
 ): { combination: string; cop: number; reason: string } {
   
   // Sort priorities by priority number (1 = highest, 7 = lowest)
@@ -248,7 +250,7 @@ function findBestCombinationForLoad(
     return { 
       combination: startingCombination, 
       cop: cop || 0, 
-      reason: `Starting with ${startingCombination} for ${load.toFixed(0)} kW load` 
+      reason: `${translations?.startingWith || 'Starting with'} ${startingCombination} ${translations?.forLoad || 'for'} ${load.toFixed(0)} ${translations?.kWLoad || 'kW load'}` 
     };
   }
   
@@ -260,7 +262,7 @@ function findBestCombinationForLoad(
   
   let bestCombination = currentCombination;
   let bestCOP = currentCOP;
-  let reason = 'No change needed';
+  let reason = translations?.noChangeNeeded || 'No change needed';
   
   // Check if current capacity is insufficient - if so, we MUST add chillers
   if (currentCapacity < load) {
@@ -285,7 +287,7 @@ function findBestCombinationForLoad(
           
           bestCombination = newCombination;
           bestCOP = newCOP;
-          reason = `Added ${priority.chiller} for capacity (${currentCapacity.toFixed(0)} → ${newCapacity.toFixed(0)} kW)`;
+          reason = `${translations?.addedFor || 'Added'} ${priority.chiller} ${translations?.forCapacity || 'for capacity'} (${currentCapacity.toFixed(0)} → ${newCapacity.toFixed(0)} kW)`;
           console.log(`✓ Added ${priority.chiller} for capacity`);
           return { combination: bestCombination, cop: bestCOP, reason };
         } else {
@@ -300,7 +302,7 @@ function findBestCombinationForLoad(
   // Try adding the next chiller in priority order
   let bestCombinationFromAdding = currentCombination;
   let bestCOPFromAdding = currentCOP;
-  let reasonFromAdding = 'No change needed';
+  let reasonFromAdding = translations?.noChangeNeeded || 'No change needed';
   
   // Find the next chiller in priority order that's not currently running
   for (const priority of sortedPriorities) {
@@ -323,7 +325,7 @@ function findBestCombinationForLoad(
         if (newCOP > currentCOP) {
           bestCombinationFromAdding = newCombination;
           bestCOPFromAdding = newCOP;
-          reasonFromAdding = `Added ${priority.chiller} for efficiency (COP: ${(newCOP || 0).toFixed(2)} vs ${(currentCOP || 0).toFixed(2)})`;
+          reasonFromAdding = `${translations?.addedFor || 'Added'} ${priority.chiller} ${translations?.forEfficiency || 'for efficiency'} (COP: ${(newCOP || 0).toFixed(2)} ${translations?.vs || 'vs'} ${(currentCOP || 0).toFixed(2)})`;
           console.log(`✓ Adding ${priority.chiller} improves COP`);
         } else {
           console.log(`✗ Adding ${priority.chiller} does not improve COP`);
@@ -340,7 +342,7 @@ function findBestCombinationForLoad(
   // Try removing the lowest priority chiller currently running
   let bestCombinationFromRemoving = currentCombination;
   let bestCOPFromRemoving = currentCOP;
-  let reasonFromRemoving = 'No change needed';
+  let reasonFromRemoving = translations?.noChangeNeeded || 'No change needed';
   
   if (currentChillers.length > 1) {
     console.log(`Current chillers: ${currentChillers.join(', ')}`);
@@ -379,10 +381,10 @@ function findBestCombinationForLoad(
           bestCombinationFromRemoving = newCombination;
           bestCOPFromRemoving = newCOP;
           if (newCOP > currentCOP) {
-            reasonFromRemoving = `Removed ${lowestPriorityChiller} for efficiency (COP: ${(newCOP || 0).toFixed(2)} vs ${(currentCOP || 0).toFixed(2)})`;
+            reasonFromRemoving = `${translations?.removedFor || 'Removed'} ${lowestPriorityChiller} ${translations?.forEfficiency || 'for efficiency'} (COP: ${(newCOP || 0).toFixed(2)} ${translations?.vs || 'vs'} ${(currentCOP || 0).toFixed(2)})`;
             console.log(`✓ Removing ${lowestPriorityChiller} improves COP`);
           } else {
-            reasonFromRemoving = `Removed ${lowestPriorityChiller} due to excess capacity (${currentCapacity.toFixed(0)} kW vs ${load.toFixed(0)} kW load)`;
+            reasonFromRemoving = `${translations?.removedFor || 'Removed'} ${lowestPriorityChiller} ${translations?.dueToExcessCapacity || 'due to excess capacity'} (${currentCapacity.toFixed(0)} kW ${translations?.vs || 'vs'} ${load.toFixed(0)} ${translations?.kWLoad || 'kW load'})`;
             console.log(`✓ Removing ${lowestPriorityChiller} due to excess capacity`);
           }
         } else {
@@ -436,7 +438,7 @@ function findBestCombinationForLoad(
     // Neither improves - stay the same
     bestCombination = currentCombination;
     bestCOP = currentCOP;
-    reason = 'No change needed - current combination is optimal';
+    reason = translations?.noChangeOptimal || 'No change needed - current combination is optimal';
     console.log(`✓ Neither improves - staying the same`);
   }
   
@@ -453,7 +455,8 @@ export function ManuallyDefinedSequence({
   hexaCopData,
   septaCopData,
   coolingLoadProfile,
-  selectedPriorityResult
+  selectedPriorityResult,
+  translations
 }: ManuallyDefinedSequenceProps) {
   const [priorities, setPriorities] = useState<ChillerPriority[]>([]);
   const [stagingEvents, setStagingEvents] = useState<StagingEvent[]>([]);
@@ -529,7 +532,8 @@ export function ManuallyDefinedSequence({
               quadCopData,
               pentaCopData,
               hexaCopData,
-              septaCopData
+              septaCopData,
+              translations
             );
             
             console.log(`Hour ${hour} result:`, result);
@@ -638,7 +642,7 @@ export function ManuallyDefinedSequence({
     };
     
     loadData();
-  }, [chillerConfigs, copData, dualCopData, tripleCopData, quadCopData, pentaCopData, hexaCopData, septaCopData, coolingLoadProfile, priorities]);
+  }, [chillerConfigs, copData, dualCopData, tripleCopData, quadCopData, pentaCopData, hexaCopData, septaCopData, coolingLoadProfile, priorities, translations]);
 
   console.log('ManuallyDefinedSequence render - loading:', loading, 'priorities:', priorities?.length, 'error:', error);
 
@@ -740,7 +744,8 @@ export function ManuallyDefinedSequence({
             quadCopData,
             pentaCopData,
             hexaCopData,
-            septaCopData
+            septaCopData,
+            translations
           );
           
           // Store hourly combination
@@ -903,11 +908,11 @@ export function ManuallyDefinedSequence({
                 const totalDailyCoolingLoad = coolingLoadProfile.reduce((sum, hour) => sum + hour.load, 0);
                 // Calculate daily COP = total cooling load / total power consumption
                 const dailyCOP = totalDailyCoolingLoad / selectedPriorityResult.totalEnergy;
-                return `${dailyCOP.toFixed(2)} Daily COP`;
+                return `${dailyCOP.toFixed(2)} ${translations?.dailyCOP || 'Daily COP'}`;
               })()}
             </div>
             <div className="text-sm text-gray-400">
-              {selectedPriorityResult.totalEnergy.toFixed(0)} kWh/day
+              {selectedPriorityResult.totalEnergy.toFixed(0)} {translations?.kwhPerDay || 'kWh/day'}
             </div>
           </div>
         )}
@@ -916,7 +921,7 @@ export function ManuallyDefinedSequence({
       {selectedPriorityResult ? (
         <>
           <div className="mb-4">
-            <div className="text-gray-300 font-medium mb-2">Staging Events</div>
+            <div className="text-gray-300 font-medium mb-2">{translations?.stagingEvents || 'Staging Events'}</div>
             <div className="space-y-1 max-h-32 overflow-y-auto">
               {(selectedPriorityResult ? selectedPriorityResult.stagingEvents : stagingEvents).length > 0 ? (
                 (() => {
@@ -969,27 +974,27 @@ export function ManuallyDefinedSequence({
                     });
                 })()
               ) : (
-                <div className="text-gray-500 italic">No staging events - static operation</div>
+                <div className="text-gray-500 italic">{translations?.noStagingEvents || 'No staging events - static operation'}</div>
               )}
             </div>
           </div>
           
           {/* Simple Hourly Combinations */}
           <div className="flex-1 min-h-0">
-            <div className="text-gray-300 font-medium mb-2">Hourly Chiller Combinations</div>
+            <div className="text-gray-300 font-medium mb-2">{translations?.hourlyChillerCombinations || 'Hourly Chiller Combinations'}</div>
             <div className="bg-gray-800/30 rounded-lg border border-gray-700/30 overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead className="bg-gray-700/50">
                     <tr>
-                      <th className="px-3 py-2 text-left text-gray-300 font-medium">Hour</th>
-                      <th className="px-3 py-2 text-left text-gray-300 font-medium">Combination</th>
-                      <th className="px-3 py-2 text-left text-gray-300 font-medium">Action</th>
-                      <th className="px-3 py-2 text-left text-gray-300 font-medium">Load (kW)</th>
-                      <th className="px-3 py-2 text-left text-gray-300 font-medium">Capacity (kW)</th>
-                      <th className="px-3 py-2 text-left text-gray-300 font-medium">COP</th>
-                      <th className="px-3 py-2 text-left text-gray-300 font-medium">Power (kW)</th>
-                      <th className="px-3 py-2 text-left text-gray-300 font-medium">Utilization</th>
+                      <th className="px-3 py-2 text-left text-gray-300 font-medium">{translations?.hour || 'Hour'}</th>
+                      <th className="px-3 py-2 text-left text-gray-300 font-medium">{translations?.combination || 'Combination'}</th>
+                      <th className="px-3 py-2 text-left text-gray-300 font-medium">{translations?.action || 'Action'}</th>
+                      <th className="px-3 py-2 text-left text-gray-300 font-medium">{translations?.loadKW || 'Load (kW)'}</th>
+                      <th className="px-3 py-2 text-left text-gray-300 font-medium">{translations?.capacityKW || 'Capacity (kW)'}</th>
+                      <th className="px-3 py-2 text-left text-gray-300 font-medium">{translations?.cop || 'COP'}</th>
+                      <th className="px-3 py-2 text-left text-gray-300 font-medium">{translations?.powerKW || 'Power (kW)'}</th>
+                      <th className="px-3 py-2 text-left text-gray-300 font-medium">{translations?.utilization || 'Utilization'}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-700/50">
@@ -1051,7 +1056,7 @@ export function ManuallyDefinedSequence({
       ) : (
         <div className="flex-1 flex items-center justify-center">
           <div className="text-gray-400 italic text-center">
-            Please select a priority order from the ranking on the right to view details.
+            {translations?.selectPriorityOrder || 'Please select a priority order from the ranking on the right to view details.'}
           </div>
         </div>
       )}

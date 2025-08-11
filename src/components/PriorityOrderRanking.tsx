@@ -39,6 +39,7 @@ interface PriorityOrderRankingProps {
   septaCopData: Record<string, number | null>[];
   coolingLoadProfile: Array<{hour: number, load: number}>;
   onResultSelect?: (result: PriorityOrderResult | null) => void;
+  translations?: any;
 }
 
 interface GroupedResult {
@@ -150,7 +151,8 @@ function findBestCombinationForLoad(
   quadCopData: Record<string, number | null>[],
   pentaCopData: Record<string, number | null>[],
   hexaCopData: Record<string, number | null>[],
-  septaCopData: Record<string, number | null>[]
+  septaCopData: Record<string, number | null>[],
+  translations?: any
 ): { combination: string; cop: number; reason: string } {
   
   // Sort priorities by priority number (1 = highest, 7 = lowest)
@@ -184,7 +186,7 @@ function findBestCombinationForLoad(
     return { 
       combination: startingCombination, 
       cop: cop || 0, 
-      reason: `Starting with ${startingCombination} for ${load.toFixed(0)} kW load` 
+      reason: `${translations?.startingWith || 'Starting with'} ${startingCombination} ${translations?.forLoad || 'for'} ${load.toFixed(0)} ${translations?.kWLoad || 'kW load'}` 
     };
   }
   
@@ -196,7 +198,7 @@ function findBestCombinationForLoad(
   
   let bestCombination = currentCombination;
   let bestCOP = currentCOP;
-  let reason = 'No change needed';
+  let reason = translations?.noChangeNeeded || 'No change needed';
   
   // Check if current capacity is insufficient - if so, we MUST add chillers
   if (currentCapacity < load) {
@@ -221,7 +223,7 @@ function findBestCombinationForLoad(
           
           bestCombination = newCombination;
           bestCOP = newCOP;
-          reason = `Added ${priority.chiller} for capacity (${currentCapacity.toFixed(0)} → ${newCapacity.toFixed(0)} kW)`;
+          reason = `${translations?.addedFor || 'Added'} ${priority.chiller} ${translations?.forCapacity || 'for capacity'} (${currentCapacity.toFixed(0)} → ${newCapacity.toFixed(0)} kW)`;
           console.log(`✓ Added ${priority.chiller} for capacity`);
           return { combination: bestCombination, cop: bestCOP, reason };
         } else {
@@ -236,7 +238,7 @@ function findBestCombinationForLoad(
   // Try adding the next chiller in priority order
   let bestCombinationFromAdding = currentCombination;
   let bestCOPFromAdding = currentCOP;
-  let reasonFromAdding = 'No change needed';
+  let reasonFromAdding = translations?.noChangeNeeded || 'No change needed';
   
   // Find the next chiller in priority order that's not currently running
   for (const priority of sortedPriorities) {
@@ -259,7 +261,7 @@ function findBestCombinationForLoad(
         if (newCOP > currentCOP) {
           bestCombinationFromAdding = newCombination;
           bestCOPFromAdding = newCOP;
-          reasonFromAdding = `Added ${priority.chiller} for efficiency (COP: ${(newCOP || 0).toFixed(2)} vs ${(currentCOP || 0).toFixed(2)})`;
+          reasonFromAdding = `${translations?.addedFor || 'Added'} ${priority.chiller} ${translations?.forEfficiency || 'for efficiency'} (COP: ${(newCOP || 0).toFixed(2)} ${translations?.vs || 'vs'} ${(currentCOP || 0).toFixed(2)})`;
           console.log(`✓ Adding ${priority.chiller} improves COP`);
         } else {
           console.log(`✗ Adding ${priority.chiller} does not improve COP`);
@@ -276,7 +278,7 @@ function findBestCombinationForLoad(
   // Try removing the lowest priority chiller currently running
   let bestCombinationFromRemoving = currentCombination;
   let bestCOPFromRemoving = currentCOP;
-  let reasonFromRemoving = 'No change needed';
+  let reasonFromRemoving = translations?.noChangeNeeded || 'No change needed';
   
   if (currentChillers.length > 1) {
     console.log(`Current chillers: ${currentChillers.join(', ')}`);
@@ -315,10 +317,10 @@ function findBestCombinationForLoad(
           bestCombinationFromRemoving = newCombination;
           bestCOPFromRemoving = newCOP;
           if (newCOP > currentCOP) {
-            reasonFromRemoving = `Removed ${lowestPriorityChiller} for efficiency (COP: ${(newCOP || 0).toFixed(2)} vs ${(currentCOP || 0).toFixed(2)})`;
+            reasonFromRemoving = `${translations?.removedFor || 'Removed'} ${lowestPriorityChiller} ${translations?.forEfficiency || 'for efficiency'} (COP: ${(newCOP || 0).toFixed(2)} ${translations?.vs || 'vs'} ${(currentCOP || 0).toFixed(2)})`;
             console.log(`✓ Removing ${lowestPriorityChiller} improves COP`);
           } else {
-            reasonFromRemoving = `Removed ${lowestPriorityChiller} due to excess capacity (${currentCapacity.toFixed(0)} kW vs ${load.toFixed(0)} kW load)`;
+            reasonFromRemoving = `${translations?.removedFor || 'Removed'} ${lowestPriorityChiller} ${translations?.dueToExcessCapacity || 'due to excess capacity'} (${currentCapacity.toFixed(0)} kW ${translations?.vs || 'vs'} ${load.toFixed(0)} ${translations?.kWLoad || 'kW load'})`;
             console.log(`✓ Removing ${lowestPriorityChiller} due to excess capacity`);
           }
         } else {
@@ -372,7 +374,7 @@ function findBestCombinationForLoad(
     // Neither improves - stay the same
     bestCombination = currentCombination;
     bestCOP = currentCOP;
-    reason = 'No change needed - current combination is optimal';
+    reason = translations?.noChangeOptimal || 'No change needed - current combination is optimal';
     console.log(`✓ Neither improves - staying the same`);
   }
   
@@ -415,7 +417,8 @@ function calculatePriorityOrderPerformance(
   pentaCopData: Record<string, number | null>[],
   hexaCopData: Record<string, number | null>[],
   septaCopData: Record<string, number | null>[],
-  coolingLoadProfile: Array<{hour: number, load: number}>
+  coolingLoadProfile: Array<{hour: number, load: number}>,
+  translations?: any
 ): PriorityOrderResult {
   const events: Array<{
     hour: number;
@@ -456,7 +459,8 @@ function calculatePriorityOrderPerformance(
         quadCopData,
         pentaCopData,
         hexaCopData,
-        septaCopData
+        septaCopData,
+        translations
       );
       
       // Store hourly combination
@@ -596,7 +600,8 @@ export function PriorityOrderRanking({
   hexaCopData,
   septaCopData,
   coolingLoadProfile,
-  onResultSelect
+  onResultSelect,
+  translations: t
 }: PriorityOrderRankingProps) {
   const [results, setResults] = useState<GroupedResult[]>([]);
   const [expandedGroups, setExpandedGroups] = useState<Set<number>>(new Set());
@@ -604,6 +609,22 @@ export function PriorityOrderRanking({
   const [selectedResult, setSelectedResult] = useState<PriorityOrderResult | null>(null);
   const [hasRunAnalysis, setHasRunAnalysis] = useState(false);
   const [progress, setProgress] = useState({ current: 0, total: 0, percentage: 0 });
+
+  // Fallback translations if not provided
+  const fallbackTranslations = {
+    priorityOrderRanking: 'Priority Order Ranking',
+    topTwentyChillers: 'Top 20 chiller priority orders ranked by daily energy consumption (kWh/day)',
+    runAgain: 'Run Again',
+    runAnalysisToGenerate: 'Run analysis to generate priority order rankings based on cooling load profile',
+    runPriorityOrderAnalysis: 'Run Priority Order Analysis',
+    kwhPerDay: 'kWh/day',
+    order: 'order',
+    orders: 'orders',
+    dailyCOP: 'Daily COP',
+    actualEnergy: 'Actual Energy',
+    fullOrder: 'Full order'
+  };
+  const translations = t || fallbackTranslations;
 
   const calculateAllPriorityOrders = async () => {
     setLoading(true);
@@ -647,7 +668,8 @@ export function PriorityOrderRanking({
             pentaCopData,
             hexaCopData,
             septaCopData,
-            coolingLoadProfile
+            coolingLoadProfile,
+            translations
           );
           allResults.push(result);
         }
@@ -729,12 +751,12 @@ export function PriorityOrderRanking({
         <div className="flex items-center mb-4">
           <Award className="w-6 h-6 text-blue-400 mr-3" />
           <h2 className="text-xl font-bold text-white">
-            Priority Order Ranking
+            {translations.priorityOrderRanking}
           </h2>
         </div>
         
         <div className="text-sm text-gray-400 mb-6">
-          Run analysis to generate priority order rankings based on cooling load profile
+          {translations.runAnalysisToGenerate}
         </div>
         
         <div className="flex items-center justify-center h-32">
@@ -747,7 +769,7 @@ export function PriorityOrderRanking({
                 : 'bg-blue-600 hover:bg-blue-700 text-white'
             }`}
           >
-            Run Priority Order Analysis
+            {translations.runPriorityOrderAnalysis}
           </button>
         </div>
         
@@ -769,19 +791,19 @@ export function PriorityOrderRanking({
       <div className="flex items-center mb-4">
         <Award className="w-6 h-6 text-blue-400 mr-3" />
         <h2 className="text-xl font-bold text-white">
-          Priority Order Ranking
+          {translations.priorityOrderRanking}
         </h2>
       </div>
       
       <div className="flex items-center justify-between mb-4">
         <div className="text-sm text-gray-400">
-          Top 20 chiller priority orders ranked by daily energy consumption (kWh/day)
+          {translations.topTwentyChillers}
         </div>
         <button
           onClick={calculateAllPriorityOrders}
           className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
         >
-          Run Again
+          {translations.runAgain}
         </button>
       </div>
       
@@ -810,8 +832,8 @@ export function PriorityOrderRanking({
                   }}
                 >
                   <span className="text-sm font-bold text-gray-300 bg-gray-700/50 px-2 py-1 rounded">#{rankIdx + 1}</span>
-                  <span className="text-lg font-bold text-green-400">{group.totalEnergy.toFixed(0)} kWh/day</span>
-                  <span className="text-xs text-gray-400">({group.orders.length} order{group.orders.length > 1 ? 's' : ''})</span>
+                  <span className="text-lg font-bold text-green-400">{group.totalEnergy.toFixed(0)} {translations.kwhPerDay}</span>
+                  <span className="text-xs text-gray-400">({group.orders.length} {group.orders.length > 1 ? translations.orders : translations.order})</span>
                   {isExpanded ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
                 </div>
                 {isExpanded && (
@@ -849,10 +871,10 @@ export function PriorityOrderRanking({
                               })}
                             </div>
                             <div className="text-sm text-gray-400">
-                              Daily COP: {orderDailyCOP.toFixed(2)} | Actual Energy: {order.totalEnergy.toFixed(1)} kWh/day
+                              {translations.dailyCOP}: {orderDailyCOP.toFixed(2)} | {translations.actualEnergy}: {order.totalEnergy.toFixed(1)} {translations.kwhPerDay}
                             </div>
                             <div className="text-xs text-gray-500 mt-1">
-                              Full order: {order.priorityOrder.map(p => p.chiller).join(' → ')}
+                              {translations.fullOrder}: {order.priorityOrder.map(p => p.chiller).join(' → ')}
                             </div>
                           </div>
                         );

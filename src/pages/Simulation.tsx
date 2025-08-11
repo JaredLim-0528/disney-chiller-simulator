@@ -187,7 +187,12 @@ function getTotalPumpPower(chillerCombination: string, pumpPowerData: Record<str
 
 type ViewMode = 'single' | 'dual' | 'triple' | 'quad' | 'penta' | 'hexa' | 'septa';
 
-export function Simulation() {
+interface SimulationProps {
+  translations: any;
+  language: 'en' | 'zh';
+}
+
+export function Simulation({ translations: t, language }: SimulationProps) {
   const [chartData, setChartData] = useState<any>(null);
   const [dualChartData, setDualChartData] = useState<any>(null);
   const [tripleChartData, setTripleChartData] = useState<any>(null);
@@ -221,6 +226,11 @@ export function Simulation() {
   const [primaryPumpEnabled, setPrimaryPumpEnabled] = useState(false);
   const [pumpPower, setPumpPower] = useState<Record<string, number>>({});
   const [selectedPriorityResult, setSelectedPriorityResult] = useState<PriorityOrderResult | null>(null);
+
+  // Clear cached results when language changes to force regeneration with new translations
+  useEffect(() => {
+    setSelectedPriorityResult(null);
+  }, [language]);
   const [secondaryPumpEnabled, setSecondaryPumpEnabled] = useState(false);
   const [coolingTowerEnabled, setCoolingTowerEnabled] = useState(false);
   const [condensingPumpEnabled, setCondensingPumpEnabled] = useState(false);
@@ -235,7 +245,7 @@ export function Simulation() {
       x: {
         title: {
           display: true,
-          text: 'Cooling Load (kW)',
+          text: t?.coolingLoadKW || 'Cooling Load (kW)',
           color: '#9CA3AF'
         },
         type: 'linear' as const,
@@ -254,7 +264,7 @@ export function Simulation() {
       y: {
         title: {
           display: true,
-          text: 'COP',
+          text: t?.copAxis || 'COP',
           color: '#9CA3AF'
         },
         grid: {
@@ -949,7 +959,7 @@ export function Simulation() {
           <div className="flex items-center">
             <Activity className="w-8 h-8 text-purple-400 mr-3" />
             <h1 className="text-2xl font-bold text-white">
-              Chiller Plant Staging Analysis
+              {t.chillerPlantStagingAnalysis}
             </h1>
           </div>
         </div>
@@ -961,6 +971,7 @@ export function Simulation() {
                 key={config.Chiller}
                 config={config}
                 maxCop={chillerStats[config.Chiller]?.maxCop || 0}
+                translations={t}
               />
             ))}
           </div>
@@ -971,11 +982,11 @@ export function Simulation() {
             <div className="bg-gradient-to-br from-gray-800/50 to-gray-800/30 rounded-xl p-6 border border-gray-700/50">
               <div className="flex flex-col gap-4">
                 <div className="text-sm text-gray-400">
-                  Click the toggle button to enable staging review mode. Then select chillers to see possible stage up and stage down combinations. Hover over the info icon for detailed options.
+                  {t.stagingReviewInfo}
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
-                    <span className="text-gray-200 font-medium">Staging Review</span>
+                    <span className="text-gray-200 font-medium">{t.stagingReview}</span>
                     <button
                       onClick={() => setStagingReview(!stagingReview)}
                       className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ease-in-out ${
@@ -994,17 +1005,17 @@ export function Simulation() {
                         <div className="space-y-4">
                           {!stagingReview ? (
                             <div className="text-sm text-gray-400">
-                              Enable staging review mode to see chiller combinations and staging options.
+                              {t.enableStagingReview}
                             </div>
                           ) : selectedStagingChillers.size > 0 ? (
                             <div className="space-y-4">
                               <div className="flex items-center gap-2 text-sm text-gray-400">
-                                <span className="font-medium">Selected Configuration:</span>
+                                <span className="font-medium">{t.selectedConfiguration}:</span>
                                 <span className="text-purple-400 font-medium">{Array.from(selectedStagingChillers).sort().join(' + ')}</span>
                               </div>
                               
                               <div className="bg-gray-900/50 rounded-lg p-4 border border-gray-700/50">
-                                <div className="text-sm font-medium text-gray-300 mb-3">Stage Down Options</div>
+                                <div className="text-sm font-medium text-gray-300 mb-3">{t.stageDownOptions}</div>
                                 {selectedStagingChillers.size > 1 ? (
                                   <div className="grid grid-cols-3 gap-2">
                                     {stageDownCombinations.map((combination, idx) => (
@@ -1020,13 +1031,13 @@ export function Simulation() {
                                   </div>
                                 ) : (
                                   <div className="text-sm text-gray-400">
-                                    Select at least 2 chillers to see stage down options.
+                                    {t.selectTwoChillers}
                                   </div>
                                 )}
                               </div>
                               
                               <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700/50">
-                                <div className="text-sm font-medium text-gray-300 mb-3">Stage Up Options</div>
+                                <div className="text-sm font-medium text-gray-300 mb-3">{t.stageUpOptions}</div>
                                 {selectedStagingChillers.size > 0 && selectedStagingChillers.size < 7 ? (
                                   <div className="grid grid-cols-3 gap-2">
                                     {stageUpCombinations.map((combination, idx) => (
@@ -1040,15 +1051,15 @@ export function Simulation() {
                                 ) : (
                                   <div className="text-sm text-gray-400">
                                     {selectedStagingChillers.size === 0 
-                                      ? "Select at least one chiller to see stage up options."
-                                      : "Maximum number of chillers reached. No stage up options available."}
+                                      ? t.selectOneChiller
+                                      : t.maxChillersReached}
                                   </div>
                                 )}
                               </div>
                             </div>
                           ) : (
                             <div className="text-sm text-gray-400">
-                              No chillers selected. Please select at least one chiller to see staging options.
+                              {t.noChillersSelected}
                             </div>
                           )}
                         </div>
@@ -1088,14 +1099,14 @@ export function Simulation() {
                   className="flex items-center gap-2 px-4 py-2.5 bg-purple-500/10 hover:bg-purple-500/20 rounded-lg border border-purple-500/30 transition-all duration-200 hover:scale-105"
                 >
                   <LineChart className="w-4 h-4 text-purple-300" />
-                  <span className="text-purple-300 text-sm font-semibold">Show Staging Analysis</span>
+                  <span className="text-purple-300 text-sm font-semibold">{t.showStagingAnalysis}</span>
                 </button>
               )}
             </div>
             {!showTable && (
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
-                  <span className="text-gray-200 font-medium">Primary Chilled Water Pump</span>
+                  <span className="text-gray-200 font-medium">{t.primaryChilledWaterPump}</span>
                   <button
                     onClick={() => setPrimaryPumpEnabled(!primaryPumpEnabled)}
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ease-in-out ${
@@ -1119,7 +1130,7 @@ export function Simulation() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-gray-200 font-medium">Secondary Chilled Water Pump</span>
+                  <span className="text-gray-200 font-medium">{t.secondaryChilledWaterPump}</span>
                   <button
                     onClick={() => setSecondaryPumpEnabled(!secondaryPumpEnabled)}
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ease-in-out ${
@@ -1136,14 +1147,14 @@ export function Simulation() {
                     <Info className="w-4 h-4 text-gray-400 cursor-help" />
                     <div className="absolute right-0 mt-2 w-64 bg-gray-800 rounded-lg shadow-lg border border-gray-700 p-4 z-10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                       <div className="text-sm text-gray-400">
-                        Toggle the secondary chilled water pump. When enabled, the pump will circulate chilled water through the secondary loop.
+                        {t.secondaryPumpDescription}
                       </div>
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-gray-200 font-medium">Cooling Tower</span>
+                  <span className="text-gray-200 font-medium">{t.coolingTower}</span>
                   <button
                     onClick={() => setCoolingTowerEnabled(!coolingTowerEnabled)}
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ease-in-out ${
@@ -1160,14 +1171,14 @@ export function Simulation() {
                     <Info className="w-4 h-4 text-gray-400 cursor-help" />
                     <div className="absolute right-0 mt-2 w-64 bg-gray-800 rounded-lg shadow-lg border border-gray-700 p-4 z-10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                       <div className="text-sm text-gray-400">
-                        Toggle the cooling tower. When enabled, the cooling tower will reject heat from the condenser water loop.
+                        {t.coolingTowerDescription}
                       </div>
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-gray-200 font-medium">Condensing Water Pump</span>
+                  <span className="text-gray-200 font-medium">{t.condensingWaterPump}</span>
                   <button
                     onClick={() => setCondensingPumpEnabled(!condensingPumpEnabled)}
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ease-in-out ${
@@ -1184,7 +1195,7 @@ export function Simulation() {
                     <Info className="w-4 h-4 text-gray-400 cursor-help" />
                     <div className="absolute right-0 mt-2 w-64 bg-gray-800 rounded-lg shadow-lg border border-gray-700 p-4 z-10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                       <div className="text-sm text-gray-400">
-                        Toggle the condensing water pump. When enabled, the pump will circulate water through the condenser loop.
+                        {t.condensingPumpDescription}
                       </div>
                     </div>
                   </div>
@@ -1196,17 +1207,17 @@ export function Simulation() {
           {!showTable && (
             <div className="mb-6 text-sm text-gray-400">
               <div className="flex flex-col gap-2">
-                <p>Click on the legend items to toggle visibility. Multiple selections are allowed.</p>
+                <p>{t.clickLegendItems}</p>
                 <div className="flex flex-wrap gap-2">
                   {/* Chiller Selection Buttons */}
                   {[
-                    { mode: 'single', label: 'Chiller × 1', color: COMBINATION_COLORS.single.button, handler: handleChillerToggle, items: chillerConfigs.map(config => config.Chiller), selected: selectedChillers },
-                    { mode: 'dual', label: 'Chiller × 2', color: COMBINATION_COLORS.dual.button, handler: handleCombinationToggle, items: getValidChillerCombinations(), selected: selectedCombinations },
-                    { mode: 'triple', label: 'Chiller × 3', color: COMBINATION_COLORS.triple.button, handler: handleTripleCombinationToggle, items: getValidTripleChillerCombinations(), selected: selectedTripleCombinations },
-                    { mode: 'quad', label: 'Chiller × 4', color: COMBINATION_COLORS.quad.button, handler: handleQuadCombinationToggle, items: getValidQuadChillerCombinations(), selected: selectedQuadCombinations },
-                    { mode: 'penta', label: 'Chiller × 5', color: COMBINATION_COLORS.penta.button, handler: handlePentaCombinationToggle, items: getValidPentaChillerCombinations(), selected: selectedPentaCombinations },
-                    { mode: 'hexa', label: 'Chiller × 6', color: COMBINATION_COLORS.hexa.button, handler: handleHexaCombinationToggle, items: getValidHexaChillerCombinations(), selected: selectedHexaCombinations },
-                    { mode: 'septa', label: 'Chiller × 7', color: COMBINATION_COLORS.septa.button, handler: handleSeptaCombinationToggle, items: getValidSeptaChillerCombinations(), selected: selectedSeptaCombinations }
+                    { mode: 'single', label: t.chillerX1, color: COMBINATION_COLORS.single.button, handler: handleChillerToggle, items: chillerConfigs.map(config => config.Chiller), selected: selectedChillers },
+                    { mode: 'dual', label: t.chillerX2, color: COMBINATION_COLORS.dual.button, handler: handleCombinationToggle, items: getValidChillerCombinations(), selected: selectedCombinations },
+                    { mode: 'triple', label: t.chillerX3, color: COMBINATION_COLORS.triple.button, handler: handleTripleCombinationToggle, items: getValidTripleChillerCombinations(), selected: selectedTripleCombinations },
+                    { mode: 'quad', label: t.chillerX4, color: COMBINATION_COLORS.quad.button, handler: handleQuadCombinationToggle, items: getValidQuadChillerCombinations(), selected: selectedQuadCombinations },
+                    { mode: 'penta', label: t.chillerX5, color: COMBINATION_COLORS.penta.button, handler: handlePentaCombinationToggle, items: getValidPentaChillerCombinations(), selected: selectedPentaCombinations },
+                    { mode: 'hexa', label: t.chillerX6, color: COMBINATION_COLORS.hexa.button, handler: handleHexaCombinationToggle, items: getValidHexaChillerCombinations(), selected: selectedHexaCombinations },
+                    { mode: 'septa', label: t.chillerX7, color: COMBINATION_COLORS.septa.button, handler: handleSeptaCombinationToggle, items: getValidSeptaChillerCombinations(), selected: selectedSeptaCombinations }
                   ].map(({ mode, label, color, handler, items, selected }) => (
                     <div key={mode} className="relative group">
                       <button
@@ -1260,7 +1271,7 @@ export function Simulation() {
                                 : 'text-gray-400 hover:bg-gray-700/50'
                             }`}
                           >
-                            Select All
+                            {t.selectAll}
                           </button>
                           {items.map(item => (
                             <button
@@ -1327,7 +1338,7 @@ export function Simulation() {
                 <div className="flex items-center mb-4">
                   <Activity className="w-6 h-6 text-purple-400 mr-3" />
                   <h2 className="text-xl font-bold text-white">
-                    Chiller Plant Staging Analysis
+                    {t.chillerPlantStagingAnalysis}
                   </h2>
                 </div>
                 <div className="h-[600px] w-full">
@@ -1343,7 +1354,7 @@ export function Simulation() {
                 >
                   <Activity className="w-5 h-5 text-purple-300" />
                   <span className="text-purple-300 text-sm font-semibold">
-                    {showStagingAnalysis ? 'Hide' : 'Show'} Sequencing Analysis
+                    {showStagingAnalysis ? t.hideStagingAnalysis : t.showStagingAnalysis} {t.sequencingAnalysis}
                   </span>
                 </button>
               </div>
@@ -1355,7 +1366,7 @@ export function Simulation() {
                   <div className="flex items-center mb-4">
                     <Activity className="w-6 h-6 text-blue-400 mr-3" />
                     <h2 className="text-xl font-bold text-white">
-                      Cooling Load Profile
+                      {t.coolingLoadProfile}
                     </h2>
                   </div>
                   <div className="h-[300px] w-full">
@@ -1363,6 +1374,7 @@ export function Simulation() {
                       data={coolingLoadProfile} 
                       selectedMonth={selectedMonth}
                       onMonthChange={handleMonthChange}
+                      translations={t}
                     />
                   </div>
                 </div>
@@ -1374,7 +1386,7 @@ export function Simulation() {
                     <div className="flex items-center mb-4">
                       <Activity className="w-6 h-6 text-green-400 mr-3" />
                       <h2 className="text-xl font-bold text-white">
-                        Stage Up/Down Sequencing Simulation
+                        {t.stageUpDownSequencing}
                       </h2>
                     </div>
                     <div className="w-full">
@@ -1389,6 +1401,7 @@ export function Simulation() {
                         septaCopData={convertCopData(parsedSeptaData?.data || [])}
                         coolingLoadProfile={coolingLoadProfile}
                         selectedPriorityResult={selectedPriorityResult}
+                        translations={t}
                       />
                     </div>
                   </div>
@@ -1406,6 +1419,7 @@ export function Simulation() {
                       septaCopData={convertCopData(parsedSeptaData?.data || [])}
                       coolingLoadProfile={coolingLoadProfile}
                       onResultSelect={(result) => setSelectedPriorityResult(result)}
+                      translations={t}
                     />
                   </div>
                 </div>
@@ -1419,7 +1433,7 @@ export function Simulation() {
                       <div className="flex items-center">
                         <Activity className="w-6 h-6 text-purple-400 mr-3" />
                         <h2 className="text-xl font-bold text-white">
-                          Sequencing Simulation Analysis
+                          {t.sequencingSimulationAnalysis}
                         </h2>
                       </div>
                       <button
